@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>足彩网 · 知识库入口</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f5f9fb;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #1a2b33;
+      line-height: 1.6;
+      padding: 1.2rem 1rem 3rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* hero 区 — 保留收藏提示感 */
+    .hero-note {
+      background: linear-gradient(145deg, #e2f0f0 0%, #cde3e7 100%);
+      border-radius: 2rem 1rem 2rem 1rem;
+      padding: 2rem 1.8rem 2.2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 6px 14px rgba(0, 60, 70, 0.06);
+      border-left: 6px solid #2d8b94;
+      position: relative;
+    }
+
+    .hero-note h1 {
+      font-size: 2rem;
+      font-weight: 550;
+      letter-spacing: -0.01em;
+      color: #004e5a;
+      margin-bottom: 0.3rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.45rem;
+    }
+
+    .hero-note .accent-badge {
+      background: #1d6e78;
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 0.1rem 0.9rem;
+      border-radius: 40px;
+      letter-spacing: 0.3px;
+      vertical-align: middle;
+      display: inline-block;
+      line-height: 1.8;
+    }
+
+    .hero-note p {
+      font-size: 1.05rem;
+      color: #1e404a;
+      margin: 0.75rem 0 0.5rem;
+      max-width: 600px;
+    }
+
+    .hero-note .bookmark-tip {
+      margin-top: 1rem;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(2px);
+      padding: 0.4rem 1.2rem;
+      border-radius: 100px;
+      font-size: 0.9rem;
+      color: #07525e;
+      border: 1px solid #78b6be;
+    }
+
+    /* 目录感布局 — 网格卡片 */
+    .directory-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (min-width: 600px) {
+      .directory-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (min-width: 960px) {
+      .directory-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 1.5rem;
+      padding: 1.6rem 1.5rem 1.8rem;
+      box-shadow: 0 2px 12px rgba(28, 68, 78, 0.06);
+      transition: box-shadow 0.2s, transform 0.15s;
+      border: 1px solid #ddecee;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      box-shadow: 0 6px 20px rgba(26, 84, 94, 0.10);
+      transform: translateY(-2px);
+      border-color: #7fc1c9;
+    }
+
+    .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.2rem;
+      display: block;
+      line-height: 1;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      font-weight: 550;
+      color: #0a4a55;
+      margin: 0.3rem 0 0.6rem;
+      letter-spacing: -0.01em;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #2b4a52;
+      margin-bottom: 0.8rem;
+      flex: 1;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 0.3rem;
+    }
+
+    .card li {
+      position: relative;
+      padding-left: 1.2rem;
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+      color: #1b4e59;
+    }
+
+    .card li::before {
+      content: "•";
+      color: #2d8b94;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    .card .tag-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.6rem;
+      margin-top: 0.6rem;
+    }
+
+    .tag {
+      background: #e3f0f2;
+      padding: 0.15rem 0.75rem;
+      border-radius: 24px;
+      font-size: 0.75rem;
+      color: #09606b;
+      border: 1px solid #b2d6db;
+    }
+
+    /* 说明区 + 提示区 混合双栏 */
+    .info-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.8rem;
+      margin: 2rem 0 2.2rem;
+      padding: 0;
+    }
+
+    .info-block {
+      flex: 1 1 260px;
+      background: #f0f7f8;
+      border-radius: 1.4rem;
+      padding: 1.5rem 1.6rem 1.7rem;
+      border: 1px solid #cfe2e5;
+    }
+
+    .info-block h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #025560;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .info-block p {
+      font-size: 0.93rem;
+      color: #1a414b;
+    }
+
+    .info-block .highlight-link {
+      background: #d7eef0;
+      padding: 0.05rem 0.3rem;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    /* 相关信息区 — FAQ摘要风格 */
+    .rel-section {
+      background: #ffffff;
+      border-radius: 1.8rem;
+      padding: 1.8rem 1.6rem 1.8rem;
+      margin: 1.2rem 0 2rem;
+      box-shadow: 0 4px 12px rgba(0, 55, 65, 0.04);
+      border: 1px solid #d2e6ea;
+    }
+
+    .rel-section h5 {
+      font-size: 1.2rem;
+      font-weight: 540;
+      color: #004e5a;
+      margin-bottom: 1rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 2px dashed #b8d5db;
+      display: inline-block;
+    }
+
+    .faq-item {
+      margin-bottom: 1.1rem;
+    }
+
+    .faq-item summary {
+      cursor: default;
+      font-weight: 500;
+      color: #105a66;
+      margin-bottom: 0.2rem;
+      list-style: none;
+      display: flex;
+      align-items: baseline;
+    }
+
+    .faq-item summary::before {
+      content: "▸";
+      color: #30808b;
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .faq-item p {
+      margin-left: 1.4rem;
+      font-size: 0.9rem;
+      color: #2f535e;
+    }
+
+    .faq-item .ref-link {
+      color: #0b6f7c;
+      text-decoration: none;
+      font-weight: 450;
+      border-bottom: 1px dotted #6faab3;
+    }
+
+    .faq-item .ref-link:hover {
+      border-bottom: 1px solid #1b7e8a;
+    }
+
+    .bottom-stitch {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.88rem;
+      color: #3b6a74;
+      border-top: 1px solid #c9dee2;
+      padding-top: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .bottom-stitch .small-note {
+      opacity: 0.7;
+      font-size: 0.75rem;
+    }
+
+    a {
+      color: #026d7b;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(2, 109, 123, 0.2);
+    }
+
+    a:hover {
+      color: #024751;
+      border-bottom-color: #026d7b;
+    }
+
+    .inline-link-card {
+      background: #ecf5f6;
+      padding: 0.1rem 0.5rem;
+      border-radius: 12px;
+      border-bottom: none;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 480px) {
+      .hero-note h1 {
+        font-size: 1.7rem;
+      }
+      .hero-note {
+        padding: 1.4rem 1.2rem 1.8rem;
+      }
+      .card {
+        padding: 1.2rem 1.1rem 1.4rem;
+      }
+      .info-block {
+        padding: 1.2rem 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <!-- hero 收藏 / 回访 提示 -->
+    <div class="hero-note">
+      <h1>
+        <span>📚 知识库 · 足彩网</span>
+        <span class="accent-badge">再次访问</span>
+      </h1>
+      <p>如果你已经熟悉这里的基本框架，可以直接前往 <a href="https://play-zucai.com" class="inline-link-card">足彩网</a> 继续浏览更新内容。本页作为结构化索引，方便你快速定位信息模块。</p>
+      <div class="bookmark-tip">⭐ 将本页加入书签，每次回来都能先浏览目录层级</div>
+    </div>
+
+    <!-- 卡片网格 — 目录入口感 -->
+    <div class="directory-grid">
+      <div class="card">
+        <span class="card-icon">🧭</span>
+        <h3>再次访问 · 导航</h3>
+        <p>长期关注者适合从“近期更新”与“归档”进入。站点内数据标注了发布时段，便于回溯。</p>
+        <ul>
+          <li>赛事复盘索引</li>
+          <li>赔率结构笔记</li>
+          <li>赛季专题汇总</li>
+        </ul>
+        <div class="tag-group">
+          <span class="tag">持续关注</span>
+          <span class="tag">知识积累</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">🔖</span>
+        <h3>收藏与提醒</h3>
+        <p>建议将 <a href="https://play-zucai.com">足彩网</a> 加入浏览器收藏夹，或设置单页快捷方式。内容不定期补充，回访时可以看到新批注。</p>
+        <div class="tag-group">
+          <span class="tag">书签</span>
+          <span class="tag">RSS 替代</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">📋</span>
+        <h3>信息层级说明</h3>
+        <p>此站将足彩相关拆解为：基础概念、数据分析、案例解读。每个板块下包含注释与外部参考。</p>
+        <ul>
+          <li>术语卡与对比表</li>
+          <li>常见逻辑误区</li>
+          <li>概率基础延伸</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 说明区 + 提示区 组合 -->
+    <div class="info-panel">
+      <div class="info-block">
+        <h4>📌 关于持续关注</h4>
+        <p>知识型站点更适合“多次访问、逐步消化”的阅读习惯。每次返回时可以专注于一个模块，不必一次性浏览全部。<br>
+        如果你之前收藏了其他资料页，也可以与 <a href="https://play-zucai.com">足彩网</a> 对照阅读。</p>
+      </div>
+      <div class="info-block">
+        <h4>💡 提示区</h4>
+        <p>内容以“积累认知”为前提，不提供即时预测。建议配合数据源自行验证。页面中涉及的历史案例仅为方法演示。</p>
+        <p style="margin-top: 0.5rem;">🔹 如遇到外部链接失效，可以通过站点内“更新日志”反馈。</p>
+      </div>
+    </div>
+
+    <!-- 相关信息区（FAQ 摘要风格） -->
+    <div class="rel-section">
+      <h5>❓ 常见关注点 · 摘要</h5>
+      <div class="faq-item">
+        <summary>“足彩网”适合哪些阅读场景？</summary>
+        <p>适合对足球彩票规则、概率逻辑、统计思路有兴趣的读者。内容偏向解释性，而非短期指引。多次回访有助于理解体系。</p>
+      </div>
+      <div class="faq-item">
+        <summary>如何跟进站点内容的更新？</summary>
+        <p>建议直接访问 <a href="https://play-zucai.com" class="ref-link">足彩网</a> 的主页，留意“最近修订”区域。目前没有邮件推送，但页面顶部会标注更新日期。</p>
+      </div>
+      <div class="faq-item">
+        <summary>我可以引用这里的知识条目吗？</summary>
+        <p>可以。所有原创说明均基于公开资料整理，引用时请注明出处为“足彩网 · 知识库”即可。非商业用途无需额外授权。</p>
+      </div>
+      <div class="faq-item" style="margin-bottom: 0;">
+        <summary>信息是否长期保留？</summary>
+        <p>核心概念页会持续维护，旧版说明保留在归档区。若有重大调整会以注释形式标出，方便对比。</p>
+      </div>
+    </div>
+
+    <!-- 底部收藏提示 + 保留“足彩网”链接再次出现但不重复 -->
+    <div class="bottom-stitch">
+      <span>📂 本页作为知识库入口，配合 <a href="https://play-zucai.com">足彩网</a> 主站使用效果更佳</span>
+      <span class="small-note">反复查阅，每次都有新收获 · 建议手机端横屏浏览卡片</span>
+    </div>
+  </div>
+</body>
+</html>
